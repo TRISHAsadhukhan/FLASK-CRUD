@@ -44,8 +44,13 @@ def deleteTask():
 @app.route("/taskDone",methods=["POST"])
 def taskDone():
     id=request.form['id']
+    status = int(request.form['status'])
+    # print(status)
     cur = mysql.connection.cursor()
-    cur.execute("UPDATE tasks SET done = 1 WHERE id = %s", (id,))
+    if status == 0:
+        cur.execute("UPDATE tasks SET done = 1 WHERE id = %s", (id,))
+    else:
+        cur.execute("UPDATE tasks SET done = 0 WHERE id = %s", (id,))
     mysql.connection.commit()
     cur.close()
     return redirect(url_for("todo"))
